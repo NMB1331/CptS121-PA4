@@ -1,0 +1,96 @@
+//main.c (Works fine, print statements need to be cleaned up a little)
+
+#include "craps.h"
+#include "craps_functions.c"
+
+int main(void) {
+	//Initialize variables here/////////////
+	int point = 0;
+	int play = 0;
+	double balance = 0.0;
+	double wager = 0.0;
+	int die1 = 0, die2 = 0;
+	int *die1_ptr = &die1, *die2_ptr = &die2;
+	int sum_die = 0;
+	int first_roll = 0;
+	int point_round_status = -1;
+	////////////////////////////////////////
+	//Creates the seed for random number generation (die rolling)
+	srand((unsigned int)(time NULL));
+
+	//Prompts the user to play
+	play = want_to_play();
+	//Gets the balance and the first wager; checks if the wager is valid
+	balance = get_bank_balance();
+	wager = 0.0;
+	while (! check_wager_amount(wager, balance)) {
+		wager = get_wager_amount();
+	}
+	//Rolls the die
+	die1 = roll_die();
+	die2 = roll_die();
+	sum_die = calculate_sum_dice(die1, die2);
+	//Prints game feed to console
+	printf("The test balance is %.2lf\n", balance);
+	printf("You rolled a %d and %d\n", die1, die2);
+	printf("The sum of the die rolled is %d\n", sum_die);
+//////////////////////Start do-while loop here/////////////////////
+/////////////////////////first_roll()///////////////////////////////
+	//Calculates the result of the first roll
+
+	first_roll = is_win_loss_or_point(sum_die);
+	//printf("The result of the first roll %d\n", first_roll); //Debug
+	if (first_roll == 1) {
+		balance += wager; //adjust_bank_balance
+	}
+	else if (first_roll == 0) {
+		balance -= wager; //adjust_bank_balance
+	}
+	else {
+		point = sum_die;
+	}
+	printf("After the first roll, the point is %d, and your balance is %.2lf\n", point, balance); //Debug
+	////////////////////////////////point_rolls()////////////////////////
+	sum_die = 0;
+	point_round_status = is_point_loss_or_neither(sum_die, point);
+	while (point_round_status== -1) {
+		printf("\n\n");
+		printf("Point round! The point is %d. Make a new wager, and roll again!\n", point);
+		get_wager_amount();
+		die1 = roll_die();
+		die2 = roll_die();
+		sum_die = calculate_sum_dice(die1, die2);
+		printf("In the point round, you rolled a %d and a %d\n", die1, die2);
+		printf("The sum is %d\n", sum_die);
+		point_round_status = is_point_loss_or_neither(sum_die, point);
+	}
+	if (point_round_status == 1) {
+		printf("Nice! You win %.2lf dollars!", wager);
+		balance += wager;
+	}
+	else if (point_round_status == 0) {
+		printf("Sorry! You lost %.2lf dollars!", wager);
+		balance -= wager;
+	}
+	printf("Your balance is now %.2lf. Want to play again?\n", balance);
+	return 0;
+}
+///////////////////////////////THE WHOLE GAME//////////////////////////////////
+/*
+int main(void) {
+//initialize variables
+print_game_rules();
+want_to_play();
+//prompt for initial info (basically just balance)
+do {
+  first_roll(); //return 1 if win/loss; return 0 otherwise
+  if (!first_roll) {
+    point_rolls();
+	}
+  want_to_play();
+}
+while (balance > 0 && want_to_play());
+
+return 0;
+}
+*/
