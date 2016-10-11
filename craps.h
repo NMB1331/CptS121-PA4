@@ -1,4 +1,4 @@
-//Guard code
+//Guard code should go here...
 #define CRAPS_H
 
 //Library inclusions

@@ -1,10 +1,5 @@
 #include "craps.h"
-#include "craps_functions.c"
-
-//TO DO:
-//-Code the last of the dumb mandatory functions
-//-Touch things up- make it look pretty
-
+#include "craps_functions.c" //Maybe this shouldn't be here...
 
 int main(void) {
 	//"Global" variables initialized; seed created for rand()
