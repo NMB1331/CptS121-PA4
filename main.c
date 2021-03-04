@@ -15,7 +15,7 @@ int main(void) {
 	balance = get_bank_balance();
 
 	do {
-  	//First roll performed
+  		//First roll performed
 		first_roll_result = first_roll(balance_ptr, point_ptr);
 
 		//Point rolls performed
